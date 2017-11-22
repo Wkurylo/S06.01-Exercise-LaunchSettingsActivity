@@ -2,11 +2,15 @@ package com.example.android.sunshine;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v4.app.ShareCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import com.example.android.sunshine.utilities.SettingsActivity;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -19,6 +23,12 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        ActionBar actionBar = this.getSupportActionBar();
+
+        // Set the action bar back button to look like an up button
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         mWeatherDisplay = (TextView) findViewById(R.id.tv_display_weather);
 
@@ -31,6 +41,8 @@ public class DetailActivity extends AppCompatActivity {
             }
         }
     }
+
+
 
     /**
      * Uses the ShareCompat Intent builder to create our Forecast intent for sharing. We set the
@@ -53,6 +65,20 @@ public class DetailActivity extends AppCompatActivity {
         MenuItem menuItem = menu.findItem(R.id.action_share);
         menuItem.setIntent(createShareForecastIntent());
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        // When the home button is pressed, take the user back to the MainActivity
+        if (id == android.R.id.home) {
+            onBackPressed();
+        } else if(id == R.id.action_settings){
+            Intent startSettingsActivity = new Intent(this, SettingsActivity.class);
+            startActivity(startSettingsActivity);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     // TODO (7) Launch SettingsActivity when the Settings option is clicked
